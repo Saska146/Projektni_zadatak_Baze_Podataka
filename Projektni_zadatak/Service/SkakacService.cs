@@ -57,10 +57,7 @@ namespace Projektni_zadatak.Service
             skakaci.SaveAll(entities);
         }
 
-        //internal object PrikazivanjePoTipu(object vrstaLica)
-        //{
-        //    throw new NotImplementedException();
-        //}
+      
         public IEnumerable<Skok> PrikazivanjePoTipu(string tip)
         {
             return skakaci.PrikazivanjePoTipu(tip);

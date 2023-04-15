@@ -18,7 +18,7 @@ namespace Projektni_zadatak.UIHandler
             {
                 Console.WriteLine();
                 Console.WriteLine("Odaberite opciju:");
-                Console.WriteLine("1 - Rukovanje objektima");
+                Console.WriteLine("1 - Rukovanje skakacima");
                 Console.WriteLine("2 - Kompleksni upiti");
                 Console.WriteLine("X - Izlazak iz programa");
 

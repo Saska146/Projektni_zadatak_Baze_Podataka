@@ -82,10 +82,7 @@
     <Compile Include="DAO\IDrzavaDAO.cs" />
     <Compile Include="DAO\Impl\ComplexQueryDaoImpl.cs" />
     <Compile Include="DAO\Impl\DrzavaDAOImpl.cs" />
-    <Compile Include="DAO\Impl\SkokDAOImpl.cs" />
     <Compile Include="DAO\ISkakacDAO.cs" />
-    <Compile Include="DAO\ISkakaonicaDAO.cs" />
-    <Compile Include="DAO\ISkokDAO.cs" />
     <Compile Include="DTO\SkakaciDrzava.cs" />
     <Compile Include="DTO\TipSkakaonice.cs" />
     <Compile Include="Model\Drzava.cs" />

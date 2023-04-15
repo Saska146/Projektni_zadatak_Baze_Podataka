@@ -29,13 +29,13 @@ namespace Projektni_zadatak.Model
 
         public override string ToString()
         {
-            return string.Format("{0,-6} {1,-35} {2,-20} {3,-35} {4,-30} {5,-20}",
+            return string.Format("{0,-6} {1,-20} {2,-20} {3,-20} {4,-20} {5,-20}",
                 IdSc, ImeSc, PrzSc, IdD, Titule, PbSc);
         }
 
         public static string GetFormattedHeader()
         {
-            return string.Format("{0,-6} {1,-35} {2,-20} {3,-35} {4,-30}, {5,-20}",
+            return string.Format("{0,-6} {1,-20} {2,-20} {3,-20} {4,-20} {5,-20}",
                 "IDSC", "IMESC", "PREZSC", "ID_DRZAVE", "TITULE", "PBSC");
         }
 

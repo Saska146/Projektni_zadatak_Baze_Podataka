@@ -22,7 +22,6 @@ namespace Projektni_zadatak.UIHandler
                 Console.WriteLine("Odaberite funkcionalnost:");
                 Console.WriteLine("1  - Izvestaj svih skakaca jedne drzave");
                 Console.WriteLine("2  - Izvestaj po tipu skakaonice");
-                //Console.WriteLine("3  - Kupovina objekta");
                 Console.WriteLine("X  - Izlazak");
 
                 answer = Console.ReadLine();
@@ -35,9 +34,7 @@ namespace Projektni_zadatak.UIHandler
                     case "2":
                         SkokoviPoTipu();
                        break;
-                    //case "3":
-                    //    KupovinaObjekta();
-                    //    break;
+                    
                 }
 
             } while (!answer.ToUpper().Equals("X"));

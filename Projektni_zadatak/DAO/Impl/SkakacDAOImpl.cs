@@ -52,7 +52,7 @@ namespace Projektni_zadatak.DAO.Impl
 
         public int DeleteById(int id)
         {
-            string query = "delete from theatre where id_sc=:id_sc";
+            string query = "delete from skakac where idsc=:idsc";
 
             using (IDbConnection connection = ConnectionUtil_Pooling.GetConnection())
             {
@@ -60,9 +60,9 @@ namespace Projektni_zadatak.DAO.Impl
                 using (IDbCommand command = connection.CreateCommand())
                 {
                     command.CommandText = query;
-                    ParameterUtil.AddParameter(command, "id_th", DbType.Int32);
+                    ParameterUtil.AddParameter(command, "idsc", DbType.Int32);
                     command.Prepare();
-                    ParameterUtil.SetParameterValue(command, "id_th", id);
+                    ParameterUtil.SetParameterValue(command, "idsc", id);
                     return command.ExecuteNonQuery();
                 }
             }
@@ -75,26 +75,25 @@ namespace Projektni_zadatak.DAO.Impl
                 connection.Open();
                 return ExistsById(id, connection);
             }
-        }
+        }        
 
         private bool ExistsById(int id, IDbConnection connection)
         {
-            string query = "select * from theatre where id_sc=:id_sc";
+            string query = "select * from skakac where idsc=:idsc";
 
             using (IDbCommand command = connection.CreateCommand())
             {
                 command.CommandText = query;
-                ParameterUtil.AddParameter(command, "id_sc", DbType.Int32);
+                ParameterUtil.AddParameter(command, "idsc", DbType.Int32);
                 command.Prepare();
-                ParameterUtil.SetParameterValue(command, "id_sc", id);
+                ParameterUtil.SetParameterValue(command, "idsc", id);
                 return command.ExecuteScalar() != null;
             }
         }
 
-
         public IEnumerable<Skakac> FindAll()
         {
-            string query = "select id_sc, ime_sc, prz_sc, id_d, titule, pb_sc from skakac";
+            string query = "select idsc, imesc, przsc, idd, titule, pbsc from skakac";
             List<Skakac> theatreList = new List<Skakac>();
 
             using (IDbConnection connection = ConnectionUtil_Pooling.GetConnection())
@@ -123,7 +122,7 @@ namespace Projektni_zadatak.DAO.Impl
         public IEnumerable<Skakac> FindAllById(IEnumerable<int> ids)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("select id_sc, ime_sc, prz_sc, id_d, titule, pb_sc from skakac where id_sc in (");
+            sb.Append("select idsc, imesc, przsc, idd, titule, pbsc from skakac where idsc in (");
             foreach (int id in ids)
             {
                 sb.Append(":id" + id + ",");
@@ -154,7 +153,7 @@ namespace Projektni_zadatak.DAO.Impl
                         while (reader.Read())
                         {
                             Skakac skakac= new Skakac(reader.GetInt32(0), reader.GetString(1),
-                                reader.GetString(2), reader.GetString(3), reader.GetInt32(4), reader.GetFloat(5));
+                                reader.GetString(2), reader.GetString(3), reader.GetInt32(4), reader.GetDouble(5));
                             theatreList.Add(skakac);
                         }
                     }
@@ -166,8 +165,8 @@ namespace Projektni_zadatak.DAO.Impl
 
         public Skakac FindById(int id)
         {
-            string query = "select id_sc, ime_sc, prz_sc, id_, titule, pb_sc " +
-                       "from skakac where id_sc = :id_sc";
+            string query = "select idsc, imesc, przsc, idd, titule, pbsc " +
+                       "from skakac where idsc = :idsc";
             Skakac skakac = null;
 
             using (IDbConnection connection = ConnectionUtil_Pooling.GetConnection())
@@ -176,84 +175,22 @@ namespace Projektni_zadatak.DAO.Impl
                 using (IDbCommand command = connection.CreateCommand())
                 {
                     command.CommandText = query;
-                    ParameterUtil.AddParameter(command, "id_sc", DbType.Int32);
+
+                    ParameterUtil.AddParameter(command, "idsc", DbType.Int32);
                     command.Prepare();
-                    ParameterUtil.SetParameterValue(command, "id_sc", id);
+                    ParameterUtil.SetParameterValue(command, "idsc", id);
                     using (IDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read())
                         {
                             skakac = new Skakac(reader.GetInt32(0), reader.GetString(1),
-                                reader.GetString(2), reader.GetString(3), reader.GetInt32(4), reader.GetFloat(5));
+                                reader.GetString(2), reader.GetString(3), reader.GetInt32(4), reader.GetDouble(5));
                         }
                     }
                 }
             }
             return skakac;
-        }
-
-
-        public List<Skakac> GetSkakaceIzDrzave(int idD)
-        {
-
-            string query = "select idSc, imeSc, przSc, idD, Titule, pbSc from skakac natural join drzava where idD=:id";
-            List<Skakac> skakaci = new List<Skakac>();
-            using (IDbConnection connection = ConnectionUtil_Pooling.GetConnection())
-            {
-                connection.Open();
-                using (IDbCommand command = connection.CreateCommand())
-                {
-                    command.CommandText = query;
-
-                    ParameterUtil.AddParameter(command, "idD", DbType.String);
-
-                    command.Prepare();
-                    ParameterUtil.SetParameterValue(command, "idD", idD);
-                    using (IDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Skakac skakac = new Skakac();
-                            skakac.IdSc = reader.GetInt32(0);
-                            skakac.ImeSc = reader.GetString(1);
-                            skakac.PrzSc = reader.GetString(2);
-                            skakac.IdD = reader.GetString(3);
-                            skakac.Titule = reader.GetInt32(4);
-                            skakac.PbSc = reader.GetFloat(5);
-                        
-                            skakaci.Add(skakac);
-                        }
-                    }
-                }
-            }
-            return skakaci;
-
-        }
-
-        public int BrojTitulaSkakaca(Skakac item)
-        {
-            string query = "select count(*) from rezultat natural join staza where drzs=:drz and plasman = 1 and idv = :idv";
-            using (IDbConnection connection = ConnectionUtil_Pooling.GetConnection())
-            {
-                connection.Open();
-                using (IDbCommand command = connection.CreateCommand())
-                {
-                    command.CommandText = query;
-                    ParameterUtil.AddParameter(command, "idSc", DbType.Int32);
-                    ParameterUtil.AddParameter(command, "idD", DbType.String);
-
-                    command.Prepare();
-                    ParameterUtil.SetParameterValue(command, "idSc", item.IdSc);
-                    ParameterUtil.SetParameterValue(command, "idD", item.IdD);
-                    return Convert.ToInt32(command.ExecuteScalar());
-                }
-            }
-        }
-
-        public int UkupanBrojTitula(string idD)
-        {
-            throw new NotImplementedException();
-        }
+        }      
 
         public int Save(Skakac entity)
         {
@@ -266,26 +203,26 @@ namespace Projektni_zadatak.DAO.Impl
 
         public int Save(Skakac skakac, IDbConnection connection)
         {
-            string insertSql = "insert into skakac (ime_sc, prz_sc, id_d, titule, pb_sc, id_sc) " +
-                "values (:ime_sc, :prz_sc, :id_d, :titule, :pb_sc, :id_sc)";
-            string updateSql = "update skakac set ime_sc=:ime_sc, prz_sc=:prz_sc, " +
-                "=id_d=:id_d, titule=:titule, pb_sc=:pb_sc where id_sc=:id_sc";
+            string insertSql = "insert into skakac (imesc, przsc, idd, titule, pbsc, idsc) " +
+                "values (:imesc , :przsc, :idd, :titule, :pbsc, :idsc)";
+            string updateSql = "update skakac set imesc=:imesc, przsc=:przsc, " +
+                "idd=:idd, titule=:titule, pbsc=:pbsc where idsc=:idsc";
             using (IDbCommand command = connection.CreateCommand())
             {
                 command.CommandText = ExistsById(skakac.IdSc, connection) ? updateSql : insertSql;
-                ParameterUtil.AddParameter(command, "ime_sc", DbType.String, 50);
-                ParameterUtil.AddParameter(command, "prz_sc", DbType.String, 50);
-                ParameterUtil.AddParameter(command, "id_d", DbType.String, 50);
-                ParameterUtil.AddParameter(command, "titule", DbType.Int32, 50);
-                ParameterUtil.AddParameter(command, "pb_sc", DbType.Double); //double je stavljen da bi valsnik mogla da nastavi da radi dalje
-                ParameterUtil.AddParameter(command, "id_sc", DbType.Int32);
+                ParameterUtil.AddParameter(command, "imesc", DbType.String, 50);
+                ParameterUtil.AddParameter(command, "przsc", DbType.String, 50);
+                ParameterUtil.AddParameter(command, "idd", DbType.String, 50);
+                ParameterUtil.AddParameter(command, "titule", DbType.Int32);
+                ParameterUtil.AddParameter(command, "pbsc", DbType.Double);
+                ParameterUtil.AddParameter(command, "idsc", DbType.Int32);
                 command.Prepare();
-                ParameterUtil.SetParameterValue(command, "id_sc", skakac.IdSc);
-                ParameterUtil.SetParameterValue(command, "prz_sc", skakac.ImeSc);
-                ParameterUtil.SetParameterValue(command, "id_d", skakac.PrzSc);
-                ParameterUtil.SetParameterValue(command, "titule", skakac.IdD);
-                ParameterUtil.SetParameterValue(command, "pb_sc", skakac.Titule);
-                ParameterUtil.SetParameterValue(command, "id_sc", skakac.PbSc);
+                ParameterUtil.SetParameterValue(command, "imesc", skakac.ImeSc);
+                ParameterUtil.SetParameterValue(command, "przsc", skakac.PrzSc);
+                ParameterUtil.SetParameterValue(command, "idd", skakac.IdD);
+                ParameterUtil.SetParameterValue(command, "titule", skakac.Titule);
+                ParameterUtil.SetParameterValue(command, "pbsc", skakac.PbSc);
+                ParameterUtil.SetParameterValue(command, "idsc", skakac.IdSc);
                 return command.ExecuteNonQuery();
             }
         }
